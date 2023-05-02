@@ -1,8 +1,8 @@
-﻿using BulkyWeb.Models;
+﻿using Bulky.Models;
 using Microsoft.EntityFrameworkCore;
 
 //NOTE TO SELF: this class is basic config for the entity framework, always register in Program.cs
-namespace BulkyWeb.Data
+namespace Bulky.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
