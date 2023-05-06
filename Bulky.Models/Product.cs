@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Bulky.Models
 {
@@ -15,15 +17,31 @@ namespace Bulky.Models
 
         [Required]
         public string Title { get; set; }
-        public string Descriptio { get; set; }
+        public string Description { get; set; }
 
         [Required]
         public string ISBN { get; set; }
 
         [Required]
         public string Author { get; set; }
+
         [Required, DisplayName("List Price"), Range(1, 1000)]
         public double ListPrice { get; set; }
+
+        [Required, DisplayName("List Price for 1-50"), Range(1, 1000)]
+        public double Price { get; set; }
+
+        [Required, DisplayName("List Price for 50-100"), Range(1, 1000)]
+        public double Price50 { get; set; }
+
+        [Required, DisplayName("List Price for 100++"), Range(1, 1000)]
+        public double Price100 { get; set; }
+
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; }
+
+        public string? ImageUrl { get; set; }
 
     }
 }
