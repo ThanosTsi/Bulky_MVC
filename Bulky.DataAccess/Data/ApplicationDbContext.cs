@@ -17,6 +17,7 @@ namespace Bulky.DataAccess.Data
         //NuGet console command: add-migration UsefulName
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         //insert into Category table
         //NuGet console command: add-migration UsefulName
