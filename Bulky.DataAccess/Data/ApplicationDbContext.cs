@@ -17,6 +17,7 @@ namespace Bulky.DataAccess.Data
         //NuGet console command: add-migration UsefulName
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
         //insert into Category table
@@ -31,6 +32,29 @@ namespace Bulky.DataAccess.Data
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1 },
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
+                );
+
+            modelBuilder.Entity<Company >().HasData(
+                new Company { Id = 1, Name = "Tech Solution", StreetAddress = "123 Tech St", City = "Tech City"
+                , PostalCode = "11111", PhoneNumber = "111000011" },
+                new Company
+                {
+                    Id = 2,
+                    Name = "Great Books",
+                    StreetAddress = "123 Great St",
+                    City = "Great City"                ,
+                    PostalCode = "22222",
+                    PhoneNumber = "111000012"
+                },
+                new Company
+                {
+                    Id = 3,
+                    Name = "Awesome Books",
+                    StreetAddress = "123 Awesome St",
+                    City = "Awesome City"                ,
+                    PostalCode = "33333",
+                    PhoneNumber = "111000013"
+                }
                 );
 
             modelBuilder.Entity<Product>().HasData(
