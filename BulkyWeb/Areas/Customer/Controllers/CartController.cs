@@ -34,7 +34,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
 			foreach(var cart in ShoppingCartVM.ShoppingCartList)
 			{
-				cart.Price = GetPriceBasedOnQuantiyt(cart);
+				cart.Price = GetPriceBasedOnQuantity(cart);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
 
@@ -63,7 +63,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
 			foreach (var cart in ShoppingCartVM.ShoppingCartList)
 			{
-				cart.Price = GetPriceBasedOnQuantiyt(cart);
+				cart.Price = GetPriceBasedOnQuantity(cart);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
 			return View(ShoppingCartVM);
@@ -85,7 +85,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
 
 			foreach (var cart in ShoppingCartVM.ShoppingCartList)
 			{
-				cart.Price = GetPriceBasedOnQuantiyt(cart);
+				cart.Price = GetPriceBasedOnQuantity(cart);
 				ShoppingCartVM.OrderHeader.OrderTotal += (cart.Price * cart.Count);
 			}
 			if(applicationUser.CompanyId.GetValueOrDefault() == 0)
@@ -227,7 +227,7 @@ namespace BulkyWeb.Areas.Customer.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		private double GetPriceBasedOnQuantiyt(ShoppingCart shoppingCart)
+		private double GetPriceBasedOnQuantity(ShoppingCart shoppingCart)
 		{
 			if(shoppingCart.Count <=50)
 			{
