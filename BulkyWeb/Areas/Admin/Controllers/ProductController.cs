@@ -4,7 +4,9 @@ using Bulky.Models.ViewModels;
 using Bulky.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Stripe;
 using System.Data;
 
 namespace BulkyWeb.Areas.Admin.Controllers
@@ -25,7 +27,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includProperties:"Category").ToList();
+            List<Bulky.Models.Product> objProductList = _unitOfWork.Product.GetAll(includProperties:"Category").ToList();
 
 
             return View(objProductList);
@@ -52,7 +54,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
                     Text = u.Name,
                     Value = u.Id.ToString(),
                 }),
-                Product = new Product()
+                Product = new Bulky.Models.Product()
             };
             if (id == null || id== 0)
             {
@@ -135,6 +137,30 @@ namespace BulkyWeb.Areas.Admin.Controllers
             }
         }
 
+        public IActionResult DeleteImage(int imageId)
+        {
+            var imageToBeDeleted = _unitOfWork.ProductImage.Get(u => u.Id == imageId);
+            int productId = imageToBeDeleted.ProductId;
+            if(imageToBeDeleted != null)
+            {
+                if(!string.IsNullOrEmpty(imageToBeDeleted.ImageUrl))
+                {
+                    var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath,
+                                                    imageToBeDeleted.ImageUrl.TrimStart('\\') ?? string.Empty);
+
+                    if (System.IO.File.Exists(oldImagePath))
+                    {
+                        System.IO.File.Delete(oldImagePath);
+                    }
+                }
+                _unitOfWork.ProductImage.Remove(imageToBeDeleted);
+                _unitOfWork.Save();
+
+                TempData["success"] = "Deleted successfully";
+            }
+            return RedirectToAction(nameof(Upsert), new {id = productId });
+        }
+
         //public IActionResult Edit(int? id)
         //{
         //    if (id == null || id == 0)
@@ -202,7 +228,7 @@ namespace BulkyWeb.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult GetAll() 
         {
-            List<Product> objProductList = _unitOfWork.Product.GetAll(includProperties: "Category").ToList();
+            List<Bulky.Models.Product> objProductList = _unitOfWork.Product.GetAll(includProperties: "Category").ToList();
             return Json(new {data = objProductList});
         }
 
@@ -223,6 +249,18 @@ namespace BulkyWeb.Areas.Admin.Controllers
             //{
             //    System.IO.File.Delete(oldImagePath);
             //}
+
+            string productPath = @"Images\Products\Product-" + id;
+            string finalPath = Path.Combine(_webHostEnvironment.WebRootPath, productPath);
+
+            if (Directory.Exists(finalPath))
+            {
+                foreach(string filePath in Directory.GetFiles(finalPath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+                Directory.Delete(finalPath);
+            }
 
             _unitOfWork.Product.Remove(productToBeDeleted); 
             _unitOfWork.Save();
